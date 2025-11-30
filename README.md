@@ -1,4 +1,4 @@
-# AlphaCouncil AI - 多智能体股票分析决策系统
+# AlphaCouncil AI - 多智能体股票分析决策系统(本地部署版)
 
 ![License](https://img.shields.io/badge/license-MIT-blue.svg) ![React](https://img.shields.io/badge/React-19.0-blue) ![TypeScript](https://img.shields.io/badge/TypeScript-5.0-blue) ![Express](https://img.shields.io/badge/Express-4.18-green)
 
