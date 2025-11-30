@@ -1,6 +1,6 @@
 # AlphaCouncil AI - 多智能体股票分析决策系统
 
-![License](https://img.shields.io/badge/license-MIT-blue.svg) ![React](https://img.shields.io/badge/React-19.0-blue) ![TypeScript](https://img.shields.io/badge/TypeScript-5.0-blue) ![Tailwind](https://img.shields.io/badge/Tailwind-3.0-38bdf8)
+![License](https://img.shields.io/badge/license-MIT-blue.svg) ![React](https://img.shields.io/badge/React-19.0-blue) ![TypeScript](https://img.shields.io/badge/TypeScript-5.0-blue) ![Express](https://img.shields.io/badge/Express-4.18-green)
 
 **AlphaCouncil AI** 是一个基于前沿大语言模型（LLM）技术的专业级 A 股市场分析系统。它模拟了一家顶级基金公司的完整投资委员会决策流程，由 **10 个不同角色的 AI 智能体** 组成，通过四阶段的严谨工作流，将实时行情数据转化为专业的投资决策。
 
@@ -46,166 +46,216 @@
 
 ---
 
-## ⚙️ 技术实现细节
+## ⚙️ 技术架构
 
-### 1. 数据获取层 (Data Layer)
-*   **实时行情**：使用Vercel Serverless Functions代理聚合数据 (Juhe Data) API。
-*   **CORS 处理**：通过 `/api/stock` 后端函数解决跨域问题。
-*   **上下文注入**：获取到的 JSON 数据（如买一卖一、涨跌幅）会被格式化为 Prompt Context，强制注入到每个智能体的系统提示词中。
+### 项目结构
+```
+AlphaCouncil/
+├── server/                 # Express 后端服务器
+│   ├── index.js           # 服务器入口
+│   └── routes/            # API 路由
+│       ├── gemini.js      # Gemini API
+│       ├── deepseek.js    # DeepSeek API
+│       ├── qwen.js        # Qwen API
+│       └── stock.js       # 股票数据 API
+├── components/            # React 组件
+│   ├── AgentCard.tsx
+│   └── StockInput.tsx
+├── services/              # 前端服务层
+│   ├── geminiService.ts
+│   └── juheService.ts
+├── App.tsx                # 主应用
+├── constants.ts           # 配置常量
+├── types.ts               # TypeScript 类型定义
+├── .env                   # 环境变量（需要手动创建）
+├── .env.example           # 环境变量模板
+├── package.json
+└── README.md
+```
 
-### 2. 模型服务层 (Service Layer)
-*   **Gemini**：通过 `@google/genai` SDK 调用，支持 Google Search Grounding（联网搜索）。
-*   **DeepSeek / Qwen**：通过标准 REST API (`fetch`) 调用，支持 OpenAI 兼容格式。
-*   **Fallback 机制**：如果用户配置的 DeepSeek/Qwen Key 无效或请求失败，系统会自动降级使用 Gemini 模型完成分析，确保流程不中断。
+### 技术栈
 
-### 3. 前端交互层 (UI Layer)
-*   **React 19**：利用最新的 Hooks 管理复杂的状态流转。
-*   **Tailwind CSS**：构建响应式布局，完美适配桌面与移动端。
-*   **Audio Context**：使用 Web Audio API 生成动态的机械键盘敲击音效。
+**前端**
+- **React 19** + **TypeScript 5.0**
+- **Vite 6** 作为构建工具
+- **Tailwind CSS** 设计
+- **Recharts** 图表展示
+
+**后端**
+- **Express.js 4.18** REST API 服务器
+- **Node.js 18+**
+- 支持 **Google Gemini**、**DeepSeek**、**通义千问** API
+- **聚合数据 API** 获取实时股票数据
+
+**架构特点**
+- ✅ 前后端分离，独立部署
+- ✅ 前后端同时热重载
+- ✅ 统一的环境变量管理
+- ✅ 不依赖任何特定云平台
+- ✅ 支持任何 Node.js 托管平台
 
 ---
 
 # 🚀 快速开始
 
-## 方式一：本地部署（推荐用于开发）
+## 📋 前置要求
 
-### 前置要求
-*   Node.js 18+
-*   至少需要以下 API 密钥之一：
+*   **Node.js 18+**
+*   **npm** 或 **yarn**
+*   至少需要以下 API 密钥：
     - Google Gemini API Key（必需）
     - DeepSeek API Key（必需）
-    - 聚合数据 API Key（必需，用于获取实时股票数据）
+    - 聚合数据 API Key（必需）
     - 通义千问 API Key（可选）
-
-### 安装与运行
-
-1.  **克隆项目**
-    ```bash
-    git clone https://github.com/164149043/AlphaCouncil.git
-    cd AlphaCouncil
-    ```
-
-2.  **安装依赖**
-    ```bash
-    npm install
-    ```
-
-3.  **配置环境变量**
-    
-    复制 `.env.example` 文件为 `.env`：
-    ```bash
-    cp .env.example .env
-    ```
-    
-    编辑 `.env` 文件，填入你的 API 密钥：
-    ```env
-    # Google Gemini API 配置（必需）
-    # 获取地址: https://aistudio.google.com/app/apikey
-    GEMINI_API_KEY=your_gemini_api_key_here
-    
-    # DeepSeek API 配置（必需）
-    # 获取地址: https://platform.deepseek.com/api_keys
-    DEEPSEEK_API_KEY=your_deepseek_api_key_here
-    
-    # 聚合数据 API 配置（必需）
-    # 获取地址: https://www.juhe.cn/
-    # 需要申请: 沪深股票-基本数据接口
-    JUHE_API_KEY=your_juhe_api_key_here
-    
-    # 通义千问 API 配置（可选）
-    # 获取地址: https://dashscope.console.aliyun.com/apiKey
-    QWEN_API_KEY=your_qwen_api_key_here
-    ```
-
-4.  **启动开发服务器**
-    ```bash
-    npm run dev
-    ```
-
-5.  **使用说明**
-    *   打开浏览器访问 `http://localhost:3000`。
-    *   输入股票代码（如 `600519` 或 `sz000001`）。
-    *   （可选）点击"API 密钥配置"展开，可以输入临时 API 密钥覆盖服务器配置。
-    *   点击"启动分析"。
-
-## 方式二:Vercel 部署（推荐用于生产）
-
-### 部署到 Vercel
-
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=YOUR_GITHUB_REPO_URL)
-
-#### 快速部署步骤
-
-1. **Fork 本仓库到你的 GitHub 账户**
-
-2. **在 Vercel 导入项目**
-   - 访问 [Vercel](https://vercel.com)
-   - 点击 "New Project"
-   - 选择你 fork 的仓库
-   - Vercel 会自动检测 Vite 框架
-
-3. **配置环境变量（必需）**
-   
-   在 Vercel 项目设置中，添加以下环境变量：
-   
-   ```
-   GEMINI_API_KEY=你的_Gemini_API_密钥
-   DEEPSEEK_API_KEY=你的_DeepSeek_API_密钥
-   JUHE_API_KEY=你的_聚合数据_API_密钥
-   QWEN_API_KEY=你的_通义千问_API_密钥（可选）
-   ```
-   
-   > ⚠️ **重要**: 如果不配置环境变量，用户必须在前端手动输入 API 密钥才能使用系统。
-
-4. **点击 Deploy**
-   - Vercel 会自动构建并部署你的应用
-   - 部署完成后即可访问
-   - 每次 Git 推送都会自动触发新部署
-
-#### Vercel 环境变量配置位置
-
-1. 进入你的 Vercel 项目
-2. 点击 **Settings** 标签
-3. 选择 **Environment Variables**
-4. 添加上述环境变量
-5. 选择应用环境（Production / Preview / Development）
-6. 点击 **Save**
-
-详细部署指南请参考 [VERCEL_DEPLOY.md](./VERCEL_DEPLOY.md) 文件。
-
-### 本地开发
-
-#### 前置要求
-*   Node.js 18+
-*   Google Gemini API Key (已内置，可选更换)
-*   DeepSeek / 通义千问 API Key (已内置，可选更换)
-
-#### 安装与运行
-
-1.  **安装依赖**
-    ```bash
-    npm install
-    ```
-
-2.  **启动开发服务器**
-    ```bash
-    npm run dev
-    ```
-
-3.  **使用说明**
-    *   打开浏览器访问 `http://localhost:5173`。
-    *   输入股票代码（如 `600519` 或 `sz000001`）。
-    *   点击"启动分析"。
 
 ---
 
-## ⚠️ 免责声明
+## 🎯 本地开发
 
-本系统生成的所有分析报告、投资建议及决策结果均由人工智能模型自动生成，**仅供技术研究与辅助参考，不构成任何实质性的投资建议**。
+### 步骤 1: 克隆项目
 
-*   股市有风险，投资需谨慎。
-*   AI 模型可能会产生“幻觉”或基于过时信息进行推理。
-*   请务必结合个人独立判断进行投资操作。
+```bash
+git clone https://github.com/164149043/AlphaCouncil-local.git
+cd AlphaCouncil
+```
+
+### 步骤 2: 安装依赖
+
+```bash
+npm install
+```
+
+### 步骤 3: 配置环境变量
+
+复制 `.env.example` 文件为 `.env`：
+
+```bash
+cp .env.example .env
+```
+
+编辑 `.env` 文件，填入你的 API 密钥：
+
+```env
+# Google Gemini API 配置（必需）
+GEMINI_API_KEY=your_gemini_api_key_here
+
+# DeepSeek API 配置（必需）
+DEEPSEEK_API_KEY=your_deepseek_api_key_here
+
+# 聚合数据 API 配置（必需）
+JUHE_API_KEY=your_juhe_api_key_here
+
+# 通义千问 API 配置（可选）
+QWEN_API_KEY=your_qwen_api_key_here
+```
+
+### 步骤 4: 启动开发服务器
+
+```bash
+npm run dev
+```
+
+此命令会同时启动：
+- 🎨 **前端服务器**: http://localhost:3000
+- 🔧 **后端 API 服务器**: http://localhost:3001
+
+### 步骤 5: 访问应用
+
+1. 打开浏览器访问 **http://localhost:3000**
+2. 输入股票代码（如 `600519` 或 `sz000001`）
+3. （可选）点击 "API 密钥配置" 覆盖默认配置
+4. 点击 "启动系统" 开始分析
+
+### 分开运行（可选）
+
+如果需要分开启动前后端：
+
+```bash
+# 终端 1: 启动后端 API 服务器
+npm run server:dev
+
+# 终端 2: 启动前端开发服务器
+npm run client:dev
+```
+
+---
+
+## 🛠️ 可用命令
+
+| 命令 | 说明 |
+|------|------|
+| `npm run dev` | 同时启动前后端开发服务器 |
+| `npm run server:dev` | 仅启动后端 API 服务器 |
+| `npm run client:dev` | 仅启动前端开发服务器 |
+| `npm run build` | 构建生产版本 |
+| `npm start` | 启动生产服务器 |
+
+---
+
+## 📦 生产部署
+
+### 方法 1: 本地构建
+
+```bash
+# 1. 构建项目
+npm run build
+
+# 2. 配置生产环境变量
+cp .env.example .env
+# 编辑 .env 填入生产环境的 API 密钥
+
+# 3. 启动生产服务器
+npm start
+```
+
+生产环境下，Express 会同时 serve 前端静态文件和提供 API 服务，运行在 `http://localhost:3001`。
+
+### 方法 2: 云平台部署
+
+支持部署到：
+- **阿里云** ECS
+- **腾讯云** 云服务器
+- **Railway** - https://railway.app
+- **Render** - https://render.com
+- **Heroku** - https://heroku.com
+
+部署步骤：
+1. 上传代码到云平台
+2. 运行 `npm install && npm run build`
+3. 在平台配置环境变量（GEMINI_API_KEY, DEEPSEEK_API_KEY, JUHE_API_KEY）
+4. 运行 `npm start`
+
+---
+
+## 🔍 故障排查
+
+### 问题 1: 端口被占用
+
+**错误信息**: `EADDRINUSE: address already in use :::3001`
+
+**解决方案**:
+```bash
+# Windows PowerShell
+netstat -ano | findstr :3001
+taskkill /F /PID <进程ID>
+
+# 或者修改端口
+# 在 .env 文件中添加: PORT=3002
+```
+
+### 问题 2: API 密钥未生效
+
+**解决方案**:
+1. 检查 `.env` 文件是否在项目根目录
+2. 检查环境变量名称是否正确（区分大小写）
+3. 重启开发服务器
+
+### 问题 3: 前端无法连接后端
+
+**解决方案**:
+1. 确保后端服务器正在运行（访问 http://localhost:3001/api/health）
+2. 检查 `vite.config.ts` 中的代理配置
+3. 清除浏览器缓存
 
 ---
 
@@ -246,4 +296,20 @@
 
 ---
 
-Developed with ❤️ by AlphaCouncil Team.
+## ⚠️ 免责声明
+
+本系统生成的所有分析报告、投资建议及决策结果均由人工智能模型自动生成，**仅供技术研究与辅助参考，不构成任何实质性的投资建议**。
+
+*   股市有风险，投资需谨慎。
+*   AI 模型可能会产生"幻觉"或基于过时信息进行推理。
+*   请务必结合个人独立判断进行投资操作。
+
+---
+
+## 📄 License
+
+MIT License
+
+---
+
+Developed with ❤️ by 张一依有把越女剑

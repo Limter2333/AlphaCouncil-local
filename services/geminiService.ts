@@ -1,7 +1,6 @@
 import { AgentConfig, AgentRole, ApiKeys, ModelProvider, WorkflowState } from '../types';
 
 // 后端 AI 代理接口 URL
-// Vercel部署时自动使用相对路径
 const getBackendUrl = () => '/api/ai';
 
 /**

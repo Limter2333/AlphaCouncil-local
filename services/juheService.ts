@@ -1,6 +1,5 @@
 
 // 后端代理服务器配置
-// Vercel部署时自动使用相对路径
 const BACKEND_API_URL = '/api/stock';
 
 // 聚合数据返回的股票数据接口定义（根据官方文档更新）
