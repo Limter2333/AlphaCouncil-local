@@ -29,7 +29,7 @@ router.post('/', async (req, res) => {
         'Authorization': `Bearer ${effectiveApiKey}`
       },
       body: JSON.stringify({
-        model: model || 'qwen-plus',
+        model: model || 'deepseek-v3.2',
         messages: [
           { role: 'system', content: systemPrompt },
           { role: 'user', content: prompt }

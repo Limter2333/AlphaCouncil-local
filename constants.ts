@@ -11,8 +11,8 @@ export const DEFAULT_AGENTS: Record<AgentRole, AgentConfig> = {
     icon: "Globe",
     color: "slate",
     temperature: 0.2,
-    modelProvider: ModelProvider.GEMINI,
-    modelName: 'gemini-2.5-flash',
+    modelProvider: ModelProvider.QWEN,
+    modelName: 'deepseek-v3.2',
     systemPrompt: `你是资深A股宏观政策分析师。
 **输出风格**：冷酷、客观、宏观视角。
 **任务**：
@@ -31,8 +31,8 @@ export const DEFAULT_AGENTS: Record<AgentRole, AgentConfig> = {
     icon: "PieChart",
     color: "cyan",
     temperature: 0.3,
-    modelProvider: ModelProvider.GEMINI,
-    modelName: 'gemini-2.5-flash',
+    modelProvider: ModelProvider.QWEN,
+    modelName: 'deepseek-v3.2',
     systemPrompt: `你是A股行业轮动专家。
 **输出风格**：数据驱动，直击热点。
 **任务**：分析当前市场最强的主线。
@@ -61,8 +61,8 @@ export const DEFAULT_AGENTS: Record<AgentRole, AgentConfig> = {
     icon: "Activity",
     color: "violet",
     temperature: 0.2,
-    modelProvider: ModelProvider.DEEPSEEK,
-    modelName: 'deepseek-chat',
+    modelProvider: ModelProvider.QWEN,
+    modelName: 'deepseek-v3.2',
     systemPrompt: `你是A股技术分析专家。
 **输出风格**：像一个狙击手，只关心点位。
 **任务**：基于提供的开盘/现价/买卖盘口数据，判断长期方向。
@@ -80,8 +80,8 @@ export const DEFAULT_AGENTS: Record<AgentRole, AgentConfig> = {
     icon: "ArrowLeftRight",
     color: "emerald",
     temperature: 0.3,
-    modelProvider: ModelProvider.GEMINI,
-    modelName: 'gemini-2.5-flash',
+    modelProvider: ModelProvider.QWEN,
+    modelName: 'deepseek-v3.2',
     systemPrompt: `你是资金流向分析专家。
 **输出风格**：像一个老庄家，看穿对手盘。
 **任务**：分析盘口买卖单（五档行情），判断主力是在吸筹还是出货。
@@ -98,8 +98,8 @@ export const DEFAULT_AGENTS: Record<AgentRole, AgentConfig> = {
     icon: "FileText",
     color: "blue",
     temperature: 0.2,
-    modelProvider: ModelProvider.DEEPSEEK,
-    modelName: 'deepseek-chat',
+    modelProvider: ModelProvider.QWEN,
+    modelName: 'deepseek-v3.2',
     systemPrompt: `你是基本面估值专家。
 **输出风格**：价值投资信徒，通过数据说话。
 **特殊要求**：
@@ -130,11 +130,11 @@ export const DEFAULT_AGENTS: Record<AgentRole, AgentConfig> = {
     icon: "Users",
     color: "indigo",
     temperature: 0.4,
-    modelProvider: ModelProvider.DEEPSEEK,
-    modelName: 'deepseek-chat',
+    modelProvider: ModelProvider.QWEN,
+    modelName: 'deepseek-v3.2',
     systemPrompt: `你是基本面研究总监。
 **风格**：高屋建瓴，一针见血。
-**任务**：整合下属（宏观、行业、估值）报告。如果三者有分歧，你必须做出裁决。
+**任务**：整合下属（宏观、行业、估值）报告。如果三 者有分歧，你必须做出裁决。
 **输出要求**（Markdown，200字左右）：
 - **基本面总评**：[S/A/B/C/D]级
 - **核心矛盾**：(当前最大的利好或利空是什么)
@@ -148,8 +148,8 @@ export const DEFAULT_AGENTS: Record<AgentRole, AgentConfig> = {
     icon: "Zap",
     color: "fuchsia",
     temperature: 0.4,
-    modelProvider: ModelProvider.DEEPSEEK,
-    modelName: 'deepseek-chat',
+    modelProvider: ModelProvider.QWEN,
+    modelName: 'deepseek-v3.2',
     systemPrompt: `你是市场动能总监。
 **风格**：像个短线游资大佬，快准狠。
 **任务**：整合技术和资金面。如果有主力吸筹且形态突破，坚决看多。
@@ -168,8 +168,8 @@ export const DEFAULT_AGENTS: Record<AgentRole, AgentConfig> = {
     icon: "ShieldAlert",
     color: "orange",
     temperature: 0.1,
-    modelProvider: ModelProvider.DEEPSEEK,
-    modelName: 'deepseek-chat',
+    modelProvider: ModelProvider.QWEN,
+    modelName: 'deepseek-v3.2',
     systemPrompt: `你是系统性风险总监。
 **风格**：悲观主义者，偏执狂。
 **任务**：找出所有可能搞砸的原因。哪怕只有1%的概率崩盘，你也要警告。
@@ -186,8 +186,8 @@ export const DEFAULT_AGENTS: Record<AgentRole, AgentConfig> = {
     icon: "Scale",
     color: "amber",
     temperature: 0.2,
-    modelProvider: ModelProvider.DEEPSEEK,
-    modelName: 'deepseek-chat',
+    modelProvider: ModelProvider.QWEN,
+    modelName: 'deepseek-v3.2',
     systemPrompt: `你是组合风险总监。
 **风格**：冷酷的精算师。
 **任务**：给出具体的数字风控指标，考虑足够的缓冲空间避免频繁触发止损。
@@ -206,8 +206,8 @@ export const DEFAULT_AGENTS: Record<AgentRole, AgentConfig> = {
     icon: "Gavel",
     color: "red",
     temperature: 0.5,
-    modelProvider: ModelProvider.DEEPSEEK,
-    modelName: 'deepseek-chat',
+    modelProvider: ModelProvider.QWEN,
+    modelName: 'deepseek-v3.2',
     systemPrompt: `你是投资决策总经理，一位激进的对冲基金经理。
 **风格**：狼性文化，结果导向。
 **重要原则**：以中长期趋势为准，加大买卖区间，要求给出合理的价格区间而非单一价格点。
@@ -229,8 +229,8 @@ export const DEFAULT_AGENTS: Record<AgentRole, AgentConfig> = {
 
 // 模型选项定义
 export const MODEL_OPTIONS = [
-  { provider: ModelProvider.GEMINI, name: 'gemini-2.5-flash', label: 'Gemini 2.5 Flash' },
-  { provider: ModelProvider.GEMINI, name: 'gemini-3-pro-preview', label: 'Gemini 3.0 Pro' },
-  { provider: ModelProvider.DEEPSEEK, name: 'deepseek-chat', label: 'DeepSeek' },
+  { provider: ModelProvider.QWEN, name: 'gemini-2.5-flash', label: 'Gemini 2.5 Flash' },
+  { provider: ModelProvider.QWEN, name: 'gemini-3-pro-preview', label: 'Gemini 3.0 Pro' },
+  { provider: ModelProvider.QWEN, name: 'deepseek-chat', label: 'DeepSeek' },
   { provider: ModelProvider.QWEN, name: 'qwen-plus', label: 'Qwen Plus' },
 ];
